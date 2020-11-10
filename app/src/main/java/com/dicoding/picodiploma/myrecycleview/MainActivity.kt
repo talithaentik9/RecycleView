@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myrecyclerview.Hero
@@ -13,6 +14,7 @@ class MainActivity : AppCompatActivity() {
     private var title = "Mode List"
     private val list = ArrayList<Hero>()
     private var mode: Int = 0
+
     companion object {
         private const val STATE_TITLE = "state_string"
         private const val STATE_LIST = "state_list"
@@ -70,12 +72,24 @@ class MainActivity : AppCompatActivity() {
         rv_heroes.layoutManager = LinearLayoutManager(this)
         val listHeroAdapter = ListHeroAdapter(list)
         rv_heroes.adapter = listHeroAdapter
+
+        listHeroAdapter.setOnItemClickCallback(object : ListHeroAdapter.OnItemClickCallback{
+            override fun onItemClicked(data: Hero) {
+                showSelectedHero(data)
+            }
+        })
     }
 
     private fun showRecyclerGrid() {
         rv_heroes.layoutManager = GridLayoutManager(this, 2)
         val gridHeroAdapter = GridHeroAdapter(list)
         rv_heroes.adapter = gridHeroAdapter
+
+        gridHeroAdapter.setOnItemClickCallback(object : GridHeroAdapter.OnItemClickCallback{
+            override fun onItemClicked(data: Hero) {
+                showSelectedHero(data)
+            }
+        })
     }
 
     private fun showRecyclerCardView() {
@@ -116,5 +130,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setActionBarTitle(title: String?) {
         supportActionBar?.title = title
+    }
+    private fun showSelectedHero(hero: Hero) {
+        Toast.makeText(this, "kamu memilih ${hero.name}", Toast.LENGTH_SHORT).show()
     }
 }
